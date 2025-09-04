@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  gap: 24px;
+  flex-direction: column;
+
+  > p {
+    font-size: 14px;
+  }
+
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .container {
+    position: absolute;
+    bottom: -240px;
+    gap: 10px;
+
+    .pagination {
+      gap: 8px;
+    }
+  }
+}

@@ -1,0 +1,38 @@
+button.wrapper {
+  all: initial;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: .2s all ease-in-out;
+  border: 1px solid #9BA5BA;
+
+  &:hover {
+    background-color: white;
+  }
+
+  &:disabled {
+    pointer-events: none;
+    border-color: #C7CDD9;
+    color: #9BA5B9;
+
+    svg * {
+      stroke: #9BA5B9;
+    }
+  }
+}
+
+@media screen and (max-width: 425px) {
+  button.wrapper {
+    width: 25px;
+    height: 25px;
+    background-color: transparent;
+
+    svg {
+      height: 12px !important;
+    }
+  }
+}
