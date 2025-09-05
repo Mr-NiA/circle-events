@@ -1,4 +1,5 @@
 import { useGSAP } from "@gsap/react";
+import { useSimpleGsapAmination } from "@shared/hooks";
 import { gsap } from "gsap";
 import {
   type Dispatch,
@@ -8,7 +9,6 @@ import {
   useState,
 } from "react";
 
-gsap.registerPlugin(useGSAP);
 const fix = 15;
 
 interface IProps {
@@ -20,6 +20,7 @@ export const useRotate = ({ buttonsName, setSelectedTab }: IProps) => {
   const circleRefs = useRef<any>({
     circle: null,
     buttonsContainer: null,
+    title: null,
   });
 
   const [rotation, setRotation] = useState(0);
@@ -40,42 +41,28 @@ export const useRotate = ({ buttonsName, setSelectedTab }: IProps) => {
     scope: circleRefs?.current?.buttonsContainer,
   });
 
-  const itemsContainerRefMobile = useRef(null);
-  const itemsContainerRefMobileContext = useGSAP({
-    scope: itemsContainerRefMobile,
-  });
+  const titleContext = useGSAP({ scope: circleRefs.current.title });
 
-  const handleFadeAminateMobile = itemsContainerRefMobileContext.contextSafe(
-    () => {
-      gsap.to(itemsContainerRefMobile.current, {
-        opacity: 0,
-        duration: 0,
-        onComplete: () => {
-          gsap.to(itemsContainerRefMobile.current, {
-            delay: 0.3,
-            opacity: 1,
-            duration: 1,
-          });
-        },
-      });
-    },
-  );
-
-  const itemsContainerRef = useRef(null);
-  const { contextSafe } = useGSAP({ scope: itemsContainerRef });
-
-  const handleFadeAminate = contextSafe(() => {
-    gsap.to(itemsContainerRef.current, {
+  const handleTitleAnimation = titleContext.contextSafe(() => {
+    gsap.to(circleRefs.current.title, {
       opacity: 0,
       duration: 0,
       onComplete: () => {
-        gsap.to(itemsContainerRef.current, {
-          delay: 0.3,
+        gsap.to(circleRefs.current.title, {
           opacity: 1,
           duration: 1,
         });
       },
     });
+  });
+
+  const itemContainer = useSimpleGsapAmination({
+    startProps: { opacity: 0, duration: 0 },
+    endProps: {
+      delay: 0.3,
+      opacity: 1,
+      duration: 1,
+    },
   });
 
   const updateButtonPositions = btnContext.contextSafe(() => {
@@ -112,8 +99,8 @@ export const useRotate = ({ buttonsName, setSelectedTab }: IProps) => {
       ease: "power2.out",
       onUpdate: () => {
         setSelectedTab(i);
-        handleFadeAminate();
-        handleFadeAminateMobile();
+        handleTitleAnimation();
+        itemContainer.handleAnimation();
         updateButtonPositions();
       },
       onComplete: () => {
@@ -127,8 +114,7 @@ export const useRotate = ({ buttonsName, setSelectedTab }: IProps) => {
     isAnimating,
     buttons,
     circleRefs,
-    itemsContainerRef,
-    itemsContainerRefMobile,
+    itemsContainerRef: itemContainer.containerRef,
     handleButtonClick,
   };
 };

@@ -24,10 +24,12 @@ export const CircleRotate = forwardRef(
   ) => {
     const circleRef = useRef(null);
     const buttonsContainerRef = useRef(null);
+    const titleRef = useRef(null);
 
     useImperativeHandle(ref, () => ({
       circle: circleRef.current,
       buttonsContainer: buttonsContainerRef.current,
+      title: titleRef.current,
     }));
 
     return (
@@ -37,7 +39,9 @@ export const CircleRotate = forwardRef(
           <AnimetedNumber value={minmax.max} />
         </div>
         <div className={styles.circleContainer}>
-          <p className={styles.title}>{buttons[tab].label}</p>
+          <p ref={titleRef} className={styles.title}>
+            {buttons[tab].label}
+          </p>
           <div ref={circleRef} className={styles.circle}>
             <div ref={buttonsContainerRef} className={styles.buttonsContainer}>
               {buttons.map((button, i) => (
@@ -62,3 +66,5 @@ export const CircleRotate = forwardRef(
     );
   },
 );
+
+CircleRotate.displayName = "CircleRotate";

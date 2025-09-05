@@ -1,11 +1,12 @@
-import { useMemo, useState } from "react";
+import { useIsMobile } from "@shared/hooks";
 import {
   AnimetedNumber,
   CircleRotate,
   SimplePagination,
   Swiper,
   SwiperMobile,
-} from "../../shared/ui";
+} from "@shared/ui";
+import { useMemo, useState } from "react";
 import styles from "./styles.module.scss";
 import { useRotate } from "./useRotate";
 
@@ -25,10 +26,12 @@ interface IProps {
 }
 
 export const DateSwiperAnimeted = ({ data }: IProps) => {
-  const sections = data.map((el) => el.name);
+  const isMobile = useIsMobile();
   const [selectedTab, setSelectedTab] = useState<number>(0);
 
+  const sections = useMemo(() => data.map((el) => el.name), [data]);
   const selectedItems = data[selectedTab].items;
+  const selectedTabName = sections[selectedTab];
 
   const minmax = useMemo(() => {
     const arrayDate = Array.from(
@@ -48,35 +51,36 @@ export const DateSwiperAnimeted = ({ data }: IProps) => {
 
   const countTitle = `0${selectedTab + 1}/0${sections.length}`;
 
-  const rotateProps = useRotate({
-    setSelectedTab,
-    buttonsName: sections,
-  });
-
   const {
     handleButtonClick,
     circleRefs,
     isAnimating,
     buttons,
     itemsContainerRef,
-    itemsContainerRefMobile,
     rotation,
-  } = rotateProps;
+  } = useRotate({
+    setSelectedTab,
+    buttonsName: sections,
+  });
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.container}>
         <div className={styles.left}>
           <p className={styles.historicalDate}>Исторические даты</p>
-          <div className={styles.historicalDateMobile}>
-            <AnimetedNumber value={minmax.min} />
-            <AnimetedNumber value={minmax.max} />
+          <div className={styles.historicalMobile}>
+            <div className={styles.historicalDateMobile}>
+              <AnimetedNumber value={minmax.min} />
+              <AnimetedNumber value={minmax.max} />
+            </div>
+            <p>{selectedTabName}</p>
           </div>
           <SimplePagination
             tab={selectedTab}
             maxPages={sections.length}
             countTitle={countTitle}
             handleChangeTab={handleButtonClick}
+            isDisabled={isAnimating}
           />
         </div>
         <div className={styles.wheels}>
@@ -91,12 +95,15 @@ export const DateSwiperAnimeted = ({ data }: IProps) => {
           />
         </div>
 
-        <div className={styles.slideItemsContainer}>
-          <Swiper ref={itemsContainerRef} data={selectedItems} />
-        </div>
-        <div className={styles.slideItemsContainerMobile}>
-          <SwiperMobile ref={itemsContainerRefMobile} data={selectedItems} />
-        </div>
+        {!isMobile ? (
+          <div className={styles.slideItemsContainer}>
+            <Swiper ref={itemsContainerRef} data={selectedItems} />
+          </div>
+        ) : (
+          <div className={styles.slideItemsContainerMobile}>
+            <SwiperMobile ref={itemsContainerRef} data={selectedItems} />
+          </div>
+        )}
       </div>
     </div>
   );

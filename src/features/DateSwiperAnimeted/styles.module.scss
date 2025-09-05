@@ -45,7 +45,7 @@
         }
       }
 
-      .historicalDateMobile {
+      .historicalMobile {
         display: none;
       }
     }
@@ -117,24 +117,31 @@
           }
         }
 
-        .historicalDateMobile {
-          display: flex;
-          gap: 32px;
-          margin-bottom: 75px;
+        .historicalMobile {
+          margin-bottom: 50px;
+          display: block;
 
-          > p {
-            font-size: 56px;
-            font-weight: bold;
-            letter-spacing: -2px;
-            cursor: pointer;
+          .historicalDateMobile {
+            display: flex;
+            gap: 32px;
+            margin-bottom: 12px;
 
-            &:first-child {
-              color: #5D5FEF;
+            > p {
+              font-size: 56px;
+              font-weight: bold;
+              letter-spacing: -2px;
+              cursor: pointer;
+
+              &:first-child {
+                color: #5D5FEF;
+              }
+              &:last-child {
+                color: #EF5DA8;
+              }
             }
-            &:last-child {
-              color: #EF5DA8;
-            }
-          }
+        }
+
+
         }
       }
 

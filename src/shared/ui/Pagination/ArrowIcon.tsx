@@ -1,4 +1,5 @@
 export const ArrowIcon = (props: any) => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: <explanation>
   <svg
     width="18"
     height="22"

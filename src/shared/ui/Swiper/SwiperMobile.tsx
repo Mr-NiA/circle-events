@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react";
 import { Pagination } from "swiper/modules";
 import { Swiper as ReactSwiper, SwiperSlide } from "swiper/react";
 import styles from "./styles.module.scss";
@@ -6,18 +5,13 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "./custom.swiper-bullet.css";
 import { forwardRef } from "react";
+import { useBackToStartSwiper } from "./useBackToStartSwiper";
 
 export const SwiperMobile = forwardRef<
   HTMLDivElement,
   { data: Record<string, any>[] }
 >(({ data }, ref) => {
-  const swiperRef = useRef<any>(null);
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  useEffect(() => {
-    if (swiperRef.current) {
-      swiperRef.current.slideTo(0);
-    }
-  }, [data]);
+  const swiperRef = useBackToStartSwiper(data);
 
   return (
     <div ref={ref}>
@@ -45,3 +39,5 @@ export const SwiperMobile = forwardRef<
     </div>
   );
 });
+
+SwiperMobile.displayName = "SwiperMobile";
